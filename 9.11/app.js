@@ -5,10 +5,11 @@ require.config({
         service: "../service",
     }
 })
-require(["jquery", "saleman/index"], function($, salemanIndex) {
+require(["jquery", "saleman/index","Route"], function($, salemanIndex, Route) {
         $(".aside").on("click", ".aside-item", function(){
             if($(this).hasClass("a-saleman")){
                 salemanIndex();
+                // router.push({ path:"/saleman"} )
             }
             else if($(this).hasClass("a-product")){
 
