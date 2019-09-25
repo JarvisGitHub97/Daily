@@ -75,8 +75,9 @@ let bannerRender = (function() {
         })
     };
 
-    //轮播悬停显示
-    let handleControl = function() {
+     //基于事件委托实现事件反馈
+     let controller = function() {
+        //悬浮
         container.onmouseenter = function() {
             clearInterval(autoTimer);
             btnLeft.style.display = btnRight.style.display = 'block';
@@ -85,38 +86,53 @@ let bannerRender = (function() {
             autoTimer = setInterval(autoMove, interval);
             btnLeft.style.display = btnRight.style.display = 'none';
         };
-    };
 
-    //点击焦点切换
-    let handleFocus = function() {
-        [].forEach.call(focusList, (item, index)=>{
-            item.onclick = function() {
-                picIndex = index;
+        //获取的点击元素的索引
+        let queryIndex = function (ele) {
+            let ary = [],
+                bro = ele.previousElementSibling;
+            while (bro) {
+                ary.unshift(bro);
+                bro = bro.previousElementSibling
+            }
+            return ary.length;
+        };
+
+        //事件委托点击反馈
+        container.onclick = function(event) {
+            let target = event.target,
+                pare = target.parentNode,
+                tag = target.tagName;
+
+            //判断点击区域
+            if(tag === 'LI' && pare.className.indexOf('focus') > -1) {
+                picIndex = queryIndex(target);
                 animate(wrapper, {
-                    left:-picIndex*800
+                    left: -picIndex*800
                 }, 600);
                 clickFocus();
-            };
-        });
-    };
-
-    //点击按钮切换
-    let clickBtn = function() {
-        btnRight.onclick = autoMove;
-        btnLeft.onclick = function() {
-            picIndex--;
-            if(picIndex < 0) {
-                picIndex = slideList.length-1;
-                utils.css(wrapper, 'left', -picIndex*800);
-                picIndex--;
+                return;
             }
-            animate(wrapper, {
-                left:-picIndex*800
-            }, 600);
-            clickFocus();
-        };
-    };
+            if(tag === 'IMG' && pare.className.indexOf('btn') > -1) {
+                if(pare.className.indexOf('btnLeft') > -1) {
+                    picIndex--;
+                    if(picIndex < 0) {
+                        picIndex = slideList.length-1;
+                        utils.css(wrapper, 'left', -picIndex*800);
+                        picIndex--;
+                    }
+                    animate(wrapper, {
+                        left:-picIndex*800
+                    }, 600);
+                    clickFocus();
+                    return;
+                }
+                    autoMove();
 
+            }
+        };
+
+    };
     return {
         init:function() {
             let promise = queryData();
@@ -125,12 +141,16 @@ let bannerRender = (function() {
                         autoTimer = setInterval(autoMove, interval);
                     })
                     .then(()=>{
-                        handleControl();
-                        handleFocus();
-                        clickBtn();
+                        controller();
                     });
         }
     }
 })();
 
 bannerRender.init();
+   
+   
+   
+   
+   
+  
