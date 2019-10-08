@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* .active {
+            background-color: #999;
+        } */
+        /* .liked {
+            background-color: deeppink;
+        } */
+        /* .card {
+            width: 200px;
+            background-color: #999;
+            text-align: center;
+            margin: 5px;
+        } */
+        .panel {
+            max-width: 300px;
+            border: 1px solid #999;
+            margin-bottom: 15px;
+        }
+        .title {
+            border-bottom: 4px solid #999
+        }
+        .footer {
+            border-top: 4px solid #999
+        }
+        .panel > * {
+            padding: 15px
+        }
+    </style>
+</head>
+<body>
+    <!-- <div id="app">
+        <div>
+            <input type="text" v-model="name">          
+            <span v-if="name">你的名字：{{name}}</span>
+        </div>
+        <div>
+            <input type="text" v-model="age">
+            <span v-show="
+    </div>age">你的年龄：{{age}}</span>
+        </div> -->
+<!-- 
+    <div id="two">
+        <ul>
+            <li v-for="food in foodList">{{food.name}}:
+                ￥{{food ? food.price * food.discount : food.price}}</li>
+        </ul>
+    </div> -->
+    <!-- 标签中属性的值得最终形式只能是字符串 -->
+<!-- 
+    <div id="app">
+        <a v-bind:href=url v-bind:class="{active: isActive}">点我</a>
+    </div> -->
+<!-- 
+    <div id="app">
+        <button v-on:click="onClick"
+                v-on="{mouseenter: onEnter, mouseout: onOut}"
+        >点我</button>
+        <form v-on:keyup.enter="onEnter" v-on:submit.prevent="onSubmit">
+                <input type="text">
+                <button type="submit">提交</button>
+        </form>
+    </div> -->
+
+<!-- <div id="app">
+    <input v-model.trim|lazy|number="name"> {{name}}
+</div> -->
+
+<!-- <div id="app">
+    <label>
+        男
+        <input v-model="sex" value="male" type="checkbox">
+    </label>
+    <label>
+        女
+        <input v-model="sex" value="female" type="checkbox">
+    </label>
+    <br>
+    {{sex}}
+    <br>
+    <textarea></textarea>
+    <br>
+    <select v-model="from">
+        <option value="1">杭州</option>
+        <option value="2">成都</option>
+    </select>
+    <br>
+    <select v-model="dest" multiple>
+            <option value="1">杭州</option>
+            <option value="2">成都</option>
+            <option value="3">重庆</option>
+            <option value="4">天津</option>
+    </select>
+</div> -->
+
+<!-- <div id="app">
+    <div v-if="role == 'admin' || role == 'super_admin'">
+        管理员你好
+    </div>
+    <div v-else-if="role == 'hr'">
+        待查看简历
+    </div>
+    <div v-else>
+        没有权限
+    </div>
+</div> -->
+
+<!-- <div id="app">
+    <table border="1">
+        <thead>
+            <th>学科</th>
+            <th>分数</th>
+        </thead>
+
+        <tbody>
+            <td>数学</td>
+            <td><input type="text" v-model="math"></td>
+        </tbody>
+        <tbody>
+                <td>英语</td>
+                <td><input type="text" v-model="english"></td>
+            </tbody>
+        <tbody>
+            <td>总分</td>
+            <td>{{sum}}</td>
+        </tbody>
+        <tbody>
+                <td>平均</td>
+                <td>{{this.avrage}}</td>
+            </tbody>
+
+    </table>
+</div> -->
+
+<div id="app">
+    <!-- <alert msg="yooooo"></alert> -->
+    <!-- <like></like> -->
+    <!-- <balance></balance> -->
+    <!-- <amy></amy>
+    <bill></bill> -->
+    <!-- <input type="text" v-model="price">{{price | currency('usd')}}
+    <hr>
+    <input type="text" v-model="length">{{length | meter()}} -->
+    <!-- <div v-pin:true.bottom.right="card1.pinned" class="card">
+        <button @click="card1.pinned = !card1.pinned">钉住/取消</button>
+        Lorem ipsum dolor sit amet, consectetur
+    </div>
+
+    <div v-pin="card2.pinned" class="card">
+        <a @click="card2.pinned = !card2.pinned" href="#">pin it</a>
+        Lorem ipsum dolor sit amet, consectetur
+    </div> -->
+    <!-- <tooltip></tooltip>
+    <popup></popup> -->
+<panel>
+    <div slot="title">yo</div>
+    <div slot="content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, repellendus expedita harum nisi, enim modi quae necessitatibus explicabo quidem at, illo atque minus facere eos animi culpa numquam ipsa dolores?</div>
+    <div slot="footer">更多信息</div>
+</panel>
+<panel>
+    <div slot="title">yooooo</div>
+</panel>
+</div>
+<template id="panel-tpl">
+    <div class="panel">
+        <div class="title">
+            <slot name="title"></slot>
+        </div>
+        <div class="content">
+            <slot name="content"></slot>
+        </div>
+        <div class="footer">
+            <slot name="footer"></slot>
+        </div>
+    </div>
+</template>
+</body>
+<script src="vue2.6.9.js"></script>
+<script src="app.js"></script>
+</html>
