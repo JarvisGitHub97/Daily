@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>flyBird</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #back {
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background: url('./img/sky.png');
+            position: relative;
+            overflow: hidden;
+        }
+        #bird {
+            width: 34px;
+            height: 25px;
+            background: url('./img/birds.png') -8px -10px no-repeat;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="back">
+        <div id="bird"></div>
+    </div>
+    <script>
+    var backEle = document.getElementById('back'),
+        birdEle = document.getElementById('bird'); 
+    var count = 0;
+    var sky = {
+        x: 0
+    };
+    var bird = {
+        x: birdEle.offsetLeft,
+        y: birdEle.offsetTop,
+        speedY: 0,
+        speedX:5
+    };
+    var run = true;
+    setInterval(function() {
+        if(run) {
+            sky.x -= 5;
+            backEle.style.backgroundPositionX = sky.x + 'px'
+            bird.speedY += 1;
+            bird.y += bird.speedY;
+
+            if(bird.y < 0 ) {
+                run = false;
+                bird.y = 0
+            }
+            if(bird.y + birdEle.offsetHeight > 600) {
+                run = false;
+                bird.y = 600 - birdEle.offsetHeight;
+            }
+            birdEle.style.top = bird.y + 'px'
+        }
+     }, 30)
+
+    document.onclick = function() {
+        bird.speedY -= 10; 
+    };
+
+    function createPipe(position) {
+        var pipe = {};
+        pipe.x = position;
+        pipe.uHeight = 200 + parseInt(Math.random()*100),
+        pipe.dHeight = 400 - pipe.uHeight;
+        pipe.dTop = pipe.uHeight + 200;
+        //1创建上管道
+        var uPipe = document.createElement('div');
+        uPipe.style.width = '52px';
+        uPipe.style.height = pipe.uHeight + 'px'; 
+        uPipe.style.background = 'url(./img/pipe2.png) no-repeat center bottom';
+        uPipe.style.position = 'absolute';
+        uPipe.style.top = 0;
+        uPipe.style.left = pipe.x + 'px'; 
+        backEle.appendChild(uPipe);
+
+        //创建下管道
+        var dPipe = document.createElement('div');
+        dPipe.style.width = '52px';
+        dPipe.style.height = pipe.dHeight + 'px'; 
+        dPipe.style.background = 'url(./img/pipe1.png) no-repeat center top';
+        dPipe.style.position = 'absolute';
+        dPipe.style.top = pipe.dTop + 'px';
+        dPipe.style.left = pipe.x + 'px'; 
+        backEle.appendChild(dPipe);
+
+        setInterval(function() {
+            if (run) {
+                pipe.x -= 2;
+                uPipe.style.left = pipe.x + 'px';
+                dPipe.style.left = pipe.x + 'px'
+                if (pipe.x < -52) {
+                pipe.x = 800;
+                }
+            }
+
+            var uTouch = bird.x + 34 > pipe.x && bird.x < pipe.x + 52 && bird.y < pipe.uHeight;
+            var dTouch = bird.x + 34 > pipe.x && bird.x < pipe.x + 52 && bird.y + 25 > pipe.dTop;
+            if (uTouch || dTouch) {
+                run = false;
+            }
+        }, 30)   
+    }
+    createPipe(200);
+    createPipe(400);
+    createPipe(600);
+    createPipe(800);
+
+    </script>
+</body>
+</html>
