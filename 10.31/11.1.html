@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">添加品牌</h3>
+            </div>
+            <div class="panel-body form-inline">
+  
+                <label>
+                    name
+                    <input type="text" class="form-control" v-model="name" @keydown.enter="add">
+                </label>
+                <input type="button" value="添加" class="btn btn-success" @click="add">
+
+            </div>
+        </div>
+        <table class="table table-border table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>time</th>
+                    <th v-fontcolor="'lightblue'">operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" :key="item.id">
+                    <td v-cloak>{{item.id}}</td>
+                    <td v-cloak>{{item.name}}</td>
+                    <td v-cloak>{{item.time | dataFormat}}</td>
+                    <td><input type="button" value="删除" class="btn btn-danger" @click="del(item.id)"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="vue-resource.min.js"></script>
+<script>
+    // Vun.http.options.root = "http://www.escook.cn:3000/";
+    // Vue.http.options.emulateJSON = true;
+    Vue.directive('focus', {
+        bind: function() {},
+        inserted: function(el) {
+            el.focus()
+        },
+        update: function() {}
+    })
+
+    Vue.filter('dataFormat', function(dataStr, pattern="") {
+        var dt = new Date(dataStr);
+        var y = dt.getFullYear(),
+            m = (dt.getMonth() + 1).toString().padStart(2, "0"),
+            d = dt.getDate().toString().padStart(2, "0");
+
+        if(pattern.toLowerCase() === "yyyy-mm-dd") {
+            return `${y}-${m}-${d}`;
+        }else{
+            var hour = dt.getHours().toString().padStart(2, "0"),
+                minute = dt.getMinutes().toString().padStart(2, "0"),
+                second = dt.getSeconds().toString().padStart(2, "0");
+            return `${y}-${m}-${d} ${hour}:${minute}:${second}`;
+        }
+
+    });
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            id: '',
+            name: '',
+            keywords: '',
+            list: [
+                {id: 1, name: 'Benz', time: new Date()},
+                {id: 2, name: 'BMW', time: new Date()},
+                {id: 3, name: 'GTR', time: new Date()}
+            ]
+        },
+        methods: {
+            add() {
+              this.$http.post("api/getnew/:newid", {name: this.name}, {emulateJSON: true}).then((result)=>{
+                if(result.body.status === 0) {
+                  this.getInfo();
+                }else{
+                  alert("读写失败")
+                }
+              })
+            },
+
+            del(id) {
+              this.$http.get("api/getnewslist"+ id).then((result)=>{
+                if(result.body.status === 0) {
+                  this.getInfo();
+                }else{
+                  alert("删除失败")
+                }
+              })
+            },
+
+            getInfo() {
+              this.$http.get("api/getnewslist").then((result)=>{
+                var result = result.body;
+                if(result.status === 0) {
+                  this.list = result.message;
+                }else{
+                  alert("获取数据失败！")
+                }
+              })
+            }
+
+        },
+        directives: {
+          'fontcolor': {
+            bind: function(el, binding) {
+              el.style.color = binding.value;
+            }
+          }
+        },
+        
+        created() {
+          this.getInfo()
+        }
+        
+    })
+</script>
+
+</html>

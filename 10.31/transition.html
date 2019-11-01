@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+<style>
+    /* .box {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: lightblue;
+    }
+    .v-enter,
+    .v-leave-to {
+      opacity: 0;
+      transform: translateX(500px)
+    }
+    .v-enter-active,
+    .v-leave-active{
+      transition: all 0.5s ease;
+    }
+
+    .my-enter,
+    .my-leave-to {
+      opacity: 0;
+      transform: translateY(80px)
+    }
+    .my-enter-active,
+    .my-leave-active{
+      transition: all 0.5s ease;
+    } */
+
+  </style> 
+</head>
+<body>
+  <div id="app">
+      <button @click="flag=!flag">toggle</button>
+      <transition>
+        <h1 v-if="flag">欢迎光临</h1>
+      </transition>    
+
+      <hr>
+      
+      <button @click="flag2=!flag2">toggle</button>
+      <transition name="my">
+        <h1 v-if="flag2" >欢迎光临</h1>
+      </transition> 
+      
+      <hr>
+      <button @click="flag3=!flag3">点我</button>
+      <transition
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter">
+        <div class="box" v-show="flag3"></div>
+      </transition>
+
+  </div>
+  <hr>
+
+  <div id="test">
+    <a href="" @click.prevent="comName='login'">登录</a>
+    <a href="" @click.prevent="comName='register'">注册</a>
+    <!-- <login></login>
+    <register></register> -->
+    <component :is="comName"></component>
+  </div>
+</body>
+<script src="vue.js"></script>
+<script>
+
+  Vue.component("login", {
+    template: `<h3>登录页面</h3>`
+  })
+  Vue.component("register", {
+    template: `<h3>注册页面</h3>`
+  })
+
+  let vm = new Vue({
+    el: "#app",
+    data: {
+      flag: false,
+      flag2: false,
+      flag3: false
+    },
+    methods: {
+      beforeEnter(el) {
+        el.style.transform = 'translate(0, 0)';
+      },
+      enter(el) {
+        el.offsetWidth;
+        el.style.transform = 'translate(200px, 400px)';
+        el.style.transition = 'all 1s ease';
+        done()
+
+      },
+      afterEnter(el) {
+
+        this.flag3 = !this.flag3;
+      }
+    }
+  });
+
+  let vm2 = new Vue({
+    el: "#test",
+    data: {
+      comName: ''
+    },
+    methods: {}
+  })
+</script>
+</html>
