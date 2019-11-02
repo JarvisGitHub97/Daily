@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .myContainer {
+      margin: 20px 100px;
+    }
+  </style>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body>
+  <div class="myContainer">
+  <div id="app">
+    <comment @func="loadComment"></comment>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="item in list" :key="item.id">
+        <span class="badge">评论人：{{item.user}}</span>
+        {{item.content}}
+      </li>
+    </ul>
+    
+  </div>
+  <template id="tmp">
+    <div>
+      <div class="form-group">
+        <label>评论人</label>
+        <input type="text" class="form-control" v-model="user">
+      </div>
+
+      <div class="form-group">
+          <label>留言</label>
+          <input type="textarea" class="form-control" v-model="content">
+      </div>
+
+      <div class="form-group">
+          <input type="button" value="发表评论" class="btn btn-primary" @click="postComment">
+      </div>
+    </div>
+  </template>
+</div>
+</body>
+<script src="vue.js"></script>
+<script>
+  var com = {
+    template: `#tmp`,
+    data() {
+        return {
+          user: '',
+          content: '',
+        }
+      },
+    methods: {
+      postComment() {
+        var collectObj = {id: Date.now(), user: this.user, content: this.content},
+            collectArr = JSON.parse(localStorage.getItem("cmts") || "[]");
+        collectArr.unshift(collectObj);
+        localStorage.setItem("cmts", JSON.stringify(collectArr));
+        this.user = this.content = "";
+        this.$emit("func")
+      }
+    }
+  };
+  var vm = new Vue({
+    el: "#app",
+    data: {
+      list: [
+        {id: Date.now(), user: 'whh', content: '我叫王花花'},
+        {id: Date.now(), user: 'lsd', content: '我叫李拴蛋'}
+      ]
+    },
+    methods: {
+      loadComment() {
+        this.list = JSON.parse(localStorage.getItem("cmts") || "");
+      }
+    },
+    components: {
+      "comment": com 
+    },
+    created() {
+      this.loadComment();
+    }
+  })
+
+</script>
+</html>

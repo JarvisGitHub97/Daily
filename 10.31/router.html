@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- <router-link to="/login?id=1&name=whh">登录</router-link> -->
+    <!-- <router-link to="/reg">注册</router-link> -->
+    <router-link to="/account">account</router-link>
+    <router-view></router-view>
+  </div>
+  <template id="rt">
+      <div>
+          <h1>这是用户界面</h1>        
+          <router-link to="/account/login">登录</router-link>
+          <router-link to="/account/reg">注册</router-link>
+          <router-view></router-view>
+      </div>
+  </template>
+</body>
+<script src="vue.js"></script>
+<script src="vue-router.min.js"></script>
+<script>
+  var account = {
+    template: `#rt`
+  };
+  var login = {
+    // template: `<h2>这是登录页面--- {{$route.query.id}} --- {{$route.query.name}}</h2>`
+    template: `<h2>这是登录界面</h2>`
+  };
+  var register = {
+    template: `<h2>这是注册页面</h2>`
+  };
+
+  var router = new VueRouter({
+    // routes: [
+    //   {path: "/login", component: login},
+    //   {path: "/reg", component: register}
+    // ]
+    routes: [
+      {
+        path: "/account", 
+        component: account,
+        children: [
+          {path: "login", component: login},
+          {path: "reg", component: register}
+        ]
+      }
+    ]
+  })
+
+  let vm = new Vue({
+    el: "#app",
+    data: {},
+    methods: {},
+    router: router
+  });
+</script>
+</html>
